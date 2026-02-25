@@ -15,193 +15,193 @@ weewx_station_info{location="$station.location",latitude="$station.stn_info.lati
 # TYPE weewx_generation_info gauge
 weewx_generation_info{generator="weewx $station.version",time="$current.dateTime.format('%Y-%m-%dT%H:%M:%S%z')"} 1
 
-
 # =========================================
 # Current conditions (gauges)
 # =========================================
 
+#set $c = $current if $current else None
+
 # HELP weewx_temperature Current outdoor temperature
 # TYPE weewx_temperature gauge
-weewx_temperature{units="$current.outTemp.format(' ').lstrip()"} $current.outTemp.raw
+weewx_temperature{units="${$c.outTemp.format(' ').lstrip() if $c and $c.outTemp else 'unknown'}"} ${$c.outTemp.raw if $c and $c.outTemp and $c.outTemp.raw is not None else 'NaN'}
 
 # HELP weewx_dewpoint Current dewpoint
 # TYPE weewx_dewpoint gauge
-weewx_dewpoint{units="$current.dewpoint.format(' ').lstrip()"} $current.dewpoint.raw
+weewx_dewpoint{units="${$c.dewpoint.format(' ').lstrip() if $c and $c.dewpoint else 'unknown'}"} ${$c.dewpoint.raw if $c and $c.dewpoint and $c.dewpoint.raw is not None else 'NaN'}
 
 # HELP weewx_humidity Current outdoor humidity
 # TYPE weewx_humidity gauge
-weewx_humidity{units="$current.outHumidity.format(' ').lstrip()"} $current.outHumidity.raw
+weewx_humidity{units="${$c.outHumidity.format(' ').lstrip() if $c and $c.outHumidity else 'unknown'}"} ${$c.outHumidity.raw if $c and $c.outHumidity and $c.outHumidity.raw is not None else 'NaN'}
 
 # HELP weewx_heat_index Current heat index
 # TYPE weewx_heat_index gauge
-weewx_heat_index{units="$current.heatindex.format(' ').lstrip()"} $current.heatindex.raw
+weewx_heat_index{units="${$c.heatindex.format(' ').lstrip() if $c and $c.heatindex else 'unknown'}"} ${$c.heatindex.raw if $c and $c.heatindex and $c.heatindex.raw is not None else 'NaN'}
 
 # HELP weewx_barometer Current barometric pressure
 # TYPE weewx_barometer gauge
-weewx_barometer{units="$current.barometer.format(' ').lstrip()"} $current.barometer.raw
+weewx_barometer{units="${$c.barometer.format(' ').lstrip() if $c and $c.barometer else 'unknown'}"} ${$c.barometer.raw if $c and $c.barometer and $c.barometer.raw is not None else 'NaN'}
 
 # HELP weewx_wind_speed Current wind speed
 # TYPE weewx_wind_speed gauge
-weewx_wind_speed{units="$current.windSpeed.format(' ').lstrip()"} $current.windSpeed.raw
+weewx_wind_speed{units="${$c.windSpeed.format(' ').lstrip() if $c and $c.windSpeed else 'unknown'}"} ${$c.windSpeed.raw if $c and $c.windSpeed and $c.windSpeed.raw is not None else 'NaN'}
 
 # HELP weewx_wind_gust Current wind gust
 # TYPE weewx_wind_gust gauge
-weewx_wind_gust{units="$current.windGust.format(' ').lstrip()"} $current.windGust.raw
+weewx_wind_gust{units="${$c.windGust.format(' ').lstrip() if $c and $c.windGust else 'unknown'}"} ${$c.windGust.raw if $c and $c.windGust and $c.windGust.raw is not None else 'NaN'}
 
 # HELP weewx_wind_direction Current wind direction
 # TYPE weewx_wind_direction gauge
-weewx_wind_direction{units="$current.windDir.format(' ').lstrip()"} $current.windDir.raw
+weewx_wind_direction{units="${$c.windDir.format(' ').lstrip() if $c and $c.windDir else 'unknown'}"} ${$c.windDir.raw if $c and $c.windDir and $c.windDir.raw is not None else 'NaN'}
 
 # HELP weewx_wind_chill Current wind chill
 # TYPE weewx_wind_chill gauge
-weewx_wind_chill{units="$current.windchill.format(' ').lstrip()"} $current.windchill.raw
+weewx_wind_chill{units="${$c.windchill.format(' ').lstrip() if $c and $c.windchill else 'unknown'}"} ${$c.windchill.raw if $c and $c.windchill and $c.windchill.raw is not None else 'NaN'}
 
 # HELP weewx_rain_rate Current rain rate
 # TYPE weewx_rain_rate gauge
-weewx_rain_rate{units="$current.rainRate.format(' ').lstrip()"} $current.rainRate.raw
+weewx_rain_rate{units="${$c.rainRate.format(' ').lstrip() if $c and $c.rainRate else 'unknown'}"} ${$c.rainRate.raw if $c and $c.rainRate and $c.rainRate.raw is not None else 'NaN'}
 
 # HELP weewx_inside_temperature Current indoor temperature
 # TYPE weewx_inside_temperature gauge
-weewx_inside_temperature{units="$current.inTemp.format(' ').lstrip()"} $current.inTemp.raw
+weewx_inside_temperature{units="${$c.inTemp.format(' ').lstrip() if $c and $c.inTemp else 'unknown'}"} ${$c.inTemp.raw if $c and $c.inTemp and $c.inTemp.raw is not None else 'NaN'}
 
 # HELP weewx_inside_humidity Current indoor humidity
 # TYPE weewx_inside_humidity gauge
-weewx_inside_humidity{units="$current.inHumidity.format(' ').lstrip()"} $current.inHumidity.raw
-
+weewx_inside_humidity{units="${$c.inHumidity.format(' ').lstrip() if $c and $c.inHumidity else 'unknown'}"} ${$c.inHumidity.raw if $c and $c.inHumidity and $c.inHumidity.raw is not None else 'NaN'}
 
 # =========================================
 # Aggregate helpers
 # period = day | week | month | year
 # =========================================
 
+#set $d = $day if $day else None
+#set $w = $week if $week else None
+#set $m = $month if $month else None
+#set $y = $year if $year else None
+
 # ---------- Temperature ----------
 
 # HELP weewx_temperature_max Maximum temperature
 # TYPE weewx_temperature_max gauge
-weewx_temperature_max{period="day",units="$day.outTemp.max.format(' ').lstrip()"} $day.outTemp.max.raw
-weewx_temperature_max{period="week",units="$week.outTemp.max.format(' ').lstrip()"} $week.outTemp.max.raw
-weewx_temperature_max{period="month",units="$month.outTemp.max.format(' ').lstrip()"} $month.outTemp.max.raw
-weewx_temperature_max{period="year",units="$year.outTemp.max.format(' ').lstrip()"} $year.outTemp.max.raw
+weewx_temperature_max{period="day",units="${$d.outTemp.max.format(' ').lstrip() if $d and $d.outTemp and $d.outTemp.max else 'unknown'}"} ${$d.outTemp.max.raw if $d and $d.outTemp and $d.outTemp.max and $d.outTemp.max.raw is not None else 'NaN'}
+weewx_temperature_max{period="week",units="${$w.outTemp.max.format(' ').lstrip() if $w and $w.outTemp and $w.outTemp.max else 'unknown'}"} ${$w.outTemp.max.raw if $w and $w.outTemp and $w.outTemp.max and $w.outTemp.max.raw is not None else 'NaN'}
+weewx_temperature_max{period="month",units="${$m.outTemp.max.format(' ').lstrip() if $m and $m.outTemp and $m.outTemp.max else 'unknown'}"} ${$m.outTemp.max.raw if $m and $m.outTemp and $m.outTemp.max and $m.outTemp.max.raw is not None else 'NaN'}
+weewx_temperature_max{period="year",units="${$y.outTemp.max.format(' ').lstrip() if $y and $y.outTemp and $y.outTemp.max else 'unknown'}"} ${$y.outTemp.max.raw if $y and $y.outTemp and $y.outTemp.max and $y.outTemp.max.raw is not None else 'NaN'}
 
 # HELP weewx_temperature_min Minimum temperature
 # TYPE weewx_temperature_min gauge
-weewx_temperature_min{period="day",units="$day.outTemp.min.format(' ').lstrip()"} $day.outTemp.min.raw
-weewx_temperature_min{period="week",units="$week.outTemp.min.format(' ').lstrip()"} $week.outTemp.min.raw
-weewx_temperature_min{period="month",units="$month.outTemp.min.format(' ').lstrip()"} $month.outTemp.min.raw
-weewx_temperature_min{period="year",units="$year.outTemp.min.format(' ').lstrip()"} $year.outTemp.min.raw
-
+weewx_temperature_min{period="day",units="${$d.outTemp.min.format(' ').lstrip() if $d and $d.outTemp and $d.outTemp.min else 'unknown'}"} ${$d.outTemp.min.raw if $d and $d.outTemp and $d.outTemp.min and $d.outTemp.min.raw is not None else 'NaN'}
+weewx_temperature_min{period="week",units="${$w.outTemp.min.format(' ').lstrip() if $w and $w.outTemp and $w.outTemp.min else 'unknown'}"} ${$w.outTemp.min.raw if $w and $w.outTemp and $w.outTemp.min and $w.outTemp.min.raw is not None else 'NaN'}
+weewx_temperature_min{period="month",units="${$m.outTemp.min.format(' ').lstrip() if $m and $m.outTemp and $m.outTemp.min else 'unknown'}"} ${$m.outTemp.min.raw if $m and $m.outTemp and $m.outTemp.min and $m.outTemp.min.raw is not None else 'NaN'}
+weewx_temperature_min{period="year",units="${$y.outTemp.min.format(' ').lstrip() if $y and $y.outTemp and $y.outTemp.min else 'unknown'}"} ${$y.outTemp.min.raw if $y and $y.outTemp and $y.outTemp.min and $y.outTemp.min.raw is not None else 'NaN'}
 
 # ---------- Dewpoint ----------
 
 # HELP weewx_dewpoint_max Maximum dewpoint
 # TYPE weewx_dewpoint_max gauge
-weewx_dewpoint_max{period="day"} $day.dewpoint.max.raw
-weewx_dewpoint_max{period="week"} $week.dewpoint.max.raw
-weewx_dewpoint_max{period="month"} $month.dewpoint.max.raw
-weewx_dewpoint_max{period="year"} $year.dewpoint.max.raw
+weewx_dewpoint_max{period="day"} ${$d.dewpoint.max.raw if $d and $d.dewpoint and $d.dewpoint.max and $d.dewpoint.max.raw is not None else 'NaN'}
+weewx_dewpoint_max{period="week"} ${$w.dewpoint.max.raw if $w and $w.dewpoint and $w.dewpoint.max and $w.dewpoint.max.raw is not None else 'NaN'}
+weewx_dewpoint_max{period="month"} ${$m.dewpoint.max.raw if $m and $m.dewpoint and $m.dewpoint.max and $m.dewpoint.max.raw is not None else 'NaN'}
+weewx_dewpoint_max{period="year"} ${$y.dewpoint.max.raw if $y and $y.dewpoint and $y.dewpoint.max and $y.dewpoint.max.raw is not None else 'NaN'}
 
 # HELP weewx_dewpoint_min Minimum dewpoint
 # TYPE weewx_dewpoint_min gauge
-weewx_dewpoint_min{period="day"} $day.dewpoint.min.raw
-weewx_dewpoint_min{period="week"} $week.dewpoint.min.raw
-weewx_dewpoint_min{period="month"} $month.dewpoint.min.raw
-weewx_dewpoint_min{period="year"} $year.dewpoint.min.raw
-
+weewx_dewpoint_min{period="day"} ${$d.dewpoint.min.raw if $d and $d.dewpoint and $d.dewpoint.min and $d.dewpoint.min.raw is not None else 'NaN'}
+weewx_dewpoint_min{period="week"} ${$w.dewpoint.min.raw if $w and $w.dewpoint and $w.dewpoint.min and $w.dewpoint.min.raw is not None else 'NaN'}
+weewx_dewpoint_min{period="month"} ${$m.dewpoint.min.raw if $m and $m.dewpoint and $m.dewpoint.min and $m.dewpoint.min.raw is not None else 'NaN'}
+weewx_dewpoint_min{period="year"} ${$y.dewpoint.min.raw if $y and $y.dewpoint and $y.dewpoint.min and $y.dewpoint.min.raw is not None else 'NaN'}
 
 # ---------- Humidity ----------
 
 # HELP weewx_humidity_max Maximum humidity
 # TYPE weewx_humidity_max gauge
-weewx_humidity_max{period="day"} $day.outHumidity.max.raw
-weewx_humidity_max{period="week"} $week.outHumidity.max.raw
-weewx_humidity_max{period="month"} $month.outHumidity.max.raw
-weewx_humidity_max{period="year"} $year.outHumidity.max.raw
+weewx_humidity_max{period="day"} ${$d.outHumidity.max.raw if $d and $d.outHumidity and $d.outHumidity.max and $d.outHumidity.max.raw is not None else 'NaN'}
+weewx_humidity_max{period="week"} ${$w.outHumidity.max.raw if $w and $w.outHumidity and $w.outHumidity.max and $w.outHumidity.max.raw is not None else 'NaN'}
+weewx_humidity_max{period="month"} ${$m.outHumidity.max.raw if $m and $m.outHumidity and $m.outHumidity.max and $m.outHumidity.max.raw is not None else 'NaN'}
+weewx_humidity_max{period="year"} ${$y.outHumidity.max.raw if $y and $y.outHumidity and $y.outHumidity.max and $y.outHumidity.max.raw is not None else 'NaN'}
 
 # HELP weewx_humidity_min Minimum humidity
 # TYPE weewx_humidity_min gauge
-weewx_humidity_min{period="day"} $day.outHumidity.min.raw
-weewx_humidity_min{period="week"} $week.outHumidity.min.raw
-weewx_humidity_min{period="month"} $month.outHumidity.min.raw
-weewx_humidity_min{period="year"} $year.outHumidity.min.raw
-
+weewx_humidity_min{period="day"} ${$d.outHumidity.min.raw if $d and $d.outHumidity and $d.outHumidity.min and $d.outHumidity.min.raw is not None else 'NaN'}
+weewx_humidity_min{period="week"} ${$w.outHumidity.min.raw if $w and $w.outHumidity and $w.outHumidity.min and $w.outHumidity.min.raw is not None else 'NaN'}
+weewx_humidity_min{period="month"} ${$m.outHumidity.min.raw if $m and $m.outHumidity and $m.outHumidity.min and $m.outHumidity.min.raw is not None else 'NaN'}
+weewx_humidity_min{period="year"} ${$y.outHumidity.min.raw if $y and $y.outHumidity and $y.outHumidity.min and $y.outHumidity.min.raw is not None else 'NaN'}
 
 # ---------- Barometer ----------
 
 # HELP weewx_barometer_max Maximum barometric pressure
 # TYPE weewx_barometer_max gauge
-weewx_barometer_max{period="day"} $day.barometer.max.raw
-weewx_barometer_max{period="week"} $week.barometer.max.raw
-weewx_barometer_max{period="month"} $month.barometer.max.raw
-weewx_barometer_max{period="year"} $year.barometer.max.raw
+weewx_barometer_max{period="day"} ${$d.barometer.max.raw if $d and $d.barometer and $d.barometer.max and $d.barometer.max.raw is not None else 'NaN'}
+weewx_barometer_max{period="week"} ${$w.barometer.max.raw if $w and $w.barometer and $w.barometer.max and $w.barometer.max.raw is not None else 'NaN'}
+weewx_barometer_max{period="month"} ${$m.barometer.max.raw if $m and $m.barometer and $m.barometer.max and $m.barometer.max.raw is not None else 'NaN'}
+weewx_barometer_max{period="year"} ${$y.barometer.max.raw if $y and $y.barometer and $y.barometer.max and $y.barometer.max.raw is not None else 'NaN'}
 
 # HELP weewx_barometer_min Minimum barometric pressure
 # TYPE weewx_barometer_min gauge
-weewx_barometer_min{period="day"} $day.barometer.min.raw
-weewx_barometer_min{period="week"} $week.barometer.min.raw
-weewx_barometer_min{period="month"} $month.barometer.min.raw
-weewx_barometer_min{period="year"} $year.barometer.min.raw
-
+weewx_barometer_min{period="day"} ${$d.barometer.min.raw if $d and $d.barometer and $d.barometer.min and $d.barometer.min.raw is not None else 'NaN'}
+weewx_barometer_min{period="week"} ${$w.barometer.min.raw if $w and $w.barometer and $w.barometer.min and $w.barometer.min.raw is not None else 'NaN'}
+weewx_barometer_min{period="month"} ${$m.barometer.min.raw if $m and $m.barometer and $m.barometer.min and $m.barometer.min.raw is not None else 'NaN'}
+weewx_barometer_min{period="year"} ${$y.barometer.min.raw if $y and $y.barometer and $y.barometer.min and $y.barometer.min.raw is not None else 'NaN'}
 
 # ---------- Wind ----------
 
 # HELP weewx_wind_speed_max Maximum wind speed
 # TYPE weewx_wind_speed_max gauge
-weewx_wind_speed_max{period="day"} $day.windSpeed.max.raw
-weewx_wind_speed_max{period="week"} $week.windSpeed.max.raw
-weewx_wind_speed_max{period="month"} $month.windSpeed.max.raw
-weewx_wind_speed_max{period="year"} $year.windSpeed.max.raw
+weewx_wind_speed_max{period="day"} ${$d.windSpeed.max.raw if $d and $d.windSpeed and $d.windSpeed.max and $d.windSpeed.max.raw is not None else 'NaN'}
+weewx_wind_speed_max{period="week"} ${$w.windSpeed.max.raw if $w and $w.windSpeed and $w.windSpeed.max and $w.windSpeed.max.raw is not None else 'NaN'}
+weewx_wind_speed_max{period="month"} ${$m.windSpeed.max.raw if $m and $m.windSpeed and $m.windSpeed.max and $m.windSpeed.max.raw is not None else 'NaN'}
+weewx_wind_speed_max{period="year"} ${$y.windSpeed.max.raw if $y and $y.windSpeed and $y.windSpeed.max and $y.windSpeed.max.raw is not None else 'NaN'}
 
 # HELP weewx_wind_gust_max Maximum wind gust
 # TYPE weewx_wind_gust_max gauge
-weewx_wind_gust_max{period="day"} $day.windGust.max.raw
-weewx_wind_gust_max{period="week"} $week.windGust.max.raw
-weewx_wind_gust_max{period="month"} $month.windGust.max.raw
-weewx_wind_gust_max{period="year"} $year.windGust.max.raw
-
+weewx_wind_gust_max{period="day"} ${$d.windGust.max.raw if $d and $d.windGust and $d.windGust.max and $d.windGust.max.raw is not None else 'NaN'}
+weewx_wind_gust_max{period="week"} ${$w.windGust.max.raw if $w and $w.windGust and $w.windGust.max and $w.windGust.max.raw is not None else 'NaN'}
+weewx_wind_gust_max{period="month"} ${$m.windGust.max.raw if $m and $m.windGust and $m.windGust.max and $m.windGust.max.raw is not None else 'NaN'}
+weewx_wind_gust_max{period="year"} ${$y.windGust.max.raw if $y and $y.windGust and $y.windGust.max and $y.windGust.max.raw is not None else 'NaN'}
 
 # ---------- Rain ----------
 
 # HELP weewx_rain_rate_max Maximum rain rate
 # TYPE weewx_rain_rate_max gauge
-weewx_rain_rate_max{period="day"} $day.rainRate.max.raw
-weewx_rain_rate_max{period="week"} $week.rainRate.max.raw
-weewx_rain_rate_max{period="month"} $month.rainRate.max.raw
-weewx_rain_rate_max{period="year"} $year.rainRate.max.raw
+weewx_rain_rate_max{period="day"} ${$d.rainRate.max.raw if $d and $d.rainRate and $d.rainRate.max and $d.rainRate.max.raw is not None else 'NaN'}
+weewx_rain_rate_max{period="week"} ${$w.rainRate.max.raw if $w and $w.rainRate and $w.rainRate.max and $w.rainRate.max.raw is not None else 'NaN'}
+weewx_rain_rate_max{period="month"} ${$m.rainRate.max.raw if $m and $m.rainRate and $m.rainRate.max and $m.rainRate.max.raw is not None else 'NaN'}
+weewx_rain_rate_max{period="year"} ${$y.rainRate.max.raw if $y and $y.rainRate and $y.rainRate.max and $y.rainRate.max.raw is not None else 'NaN'}
 
 # HELP weewx_rain_total Total rainfall
 # TYPE weewx_rain_total counter
-weewx_rain_total{period="day",units="$day.rain.sum.format(' ').lstrip()"} $day.rain.sum.raw
-weewx_rain_total{period="week",units="$week.rain.sum.format(' ').lstrip()"} $week.rain.sum.raw
-weewx_rain_total{period="month",units="$month.rain.sum.format(' ').lstrip()"} $month.rain.sum.raw
-weewx_rain_total{period="year",units="$year.rain.sum.format(' ').lstrip()"} $year.rain.sum.raw
+weewx_rain_total{period="day",units="${$d.rain.sum.format(' ').lstrip() if $d and $d.rain and $d.rain.sum else 'unknown'}"} ${$d.rain.sum.raw if $d and $d.rain and $d.rain.sum and $d.rain.sum.raw is not None else 'NaN'}
+weewx_rain_total{period="week",units="${$w.rain.sum.format(' ').lstrip() if $w and $w.rain and $w.rain.sum else 'unknown'}"} ${$w.rain.sum.raw if $w and $w.rain and $w.rain.sum and $w.rain.sum.raw is not None else 'NaN'}
+weewx_rain_total{period="month",units="${$m.rain.sum.format(' ').lstrip() if $m and $m.rain and $m.rain.sum else 'unknown'}"} ${$m.rain.sum.raw if $m and $m.rain and $m.rain.sum and $m.rain.sum.raw is not None else 'NaN'}
+weewx_rain_total{period="year",units="${$y.rain.sum.format(' ').lstrip() if $y and $y.rain and $y.rain.sum else 'unknown'}"} ${$y.rain.sum.raw if $y and $y.rain and $y.rain.sum and $y.rain.sum.raw is not None else 'NaN'}
 
 
 # ---------- Indoor ----------
 
 # HELP weewx_inside_temperature_max Maximum indoor temperature
 # TYPE weewx_inside_temperature_max gauge
-weewx_inside_temperature_max{period="day"} $day.inTemp.max.raw
-weewx_inside_temperature_max{period="week"} $week.inTemp.max.raw
-weewx_inside_temperature_max{period="month"} $month.inTemp.max.raw
-weewx_inside_temperature_max{period="year"} $year.inTemp.max.raw
+weewx_inside_temperature_max{period="day"} ${$d.inTemp.max.raw if $d and $d.inTemp and $d.inTemp.max and $d.inTemp.max.raw is not None else 'NaN'}
+weewx_inside_temperature_max{period="week"} ${$w.inTemp.max.raw if $w and $w.inTemp and $w.inTemp.max and $w.inTemp.max.raw is not None else 'NaN'}
+weewx_inside_temperature_max{period="month"} ${$m.inTemp.max.raw if $m and $m.inTemp and $m.inTemp.max and $m.inTemp.max.raw is not None else 'NaN'}
+weewx_inside_temperature_max{period="year"} ${$y.inTemp.max.raw if $y and $y.inTemp and $y.inTemp.max and $y.inTemp.max.raw is not None else 'NaN'}
 
 # HELP weewx_inside_temperature_min Minimum indoor temperature
 # TYPE weewx_inside_temperature_min gauge
-weewx_inside_temperature_min{period="day"} $day.inTemp.min.raw
-weewx_inside_temperature_min{period="week"} $week.inTemp.min.raw
-weewx_inside_temperature_min{period="month"} $month.inTemp.min.raw
-weewx_inside_temperature_min{period="year"} $year.inTemp.min.raw
+weewx_inside_temperature_min{period="day"} ${$d.inTemp.min.raw if $d and $d.inTemp and $d.inTemp.min and $d.inTemp.min.raw is not None else 'NaN'}
+weewx_inside_temperature_min{period="week"} ${$w.inTemp.min.raw if $w and $w.inTemp and $w.inTemp.min and $w.inTemp.min.raw is not None else 'NaN'}
+weewx_inside_temperature_min{period="month"} ${$m.inTemp.min.raw if $m and $m.inTemp and $m.inTemp.min and $m.inTemp.min.raw is not None else 'NaN'}
+weewx_inside_temperature_min{period="year"} ${$y.inTemp.min.raw if $y and $y.inTemp and $y.inTemp.min and $y.inTemp.min.raw is not None else 'NaN'}
 
 # HELP weewx_inside_humidity_max Maximum indoor humidity
 # TYPE weewx_inside_humidity_max gauge
-weewx_inside_humidity_max{period="day"} $day.inHumidity.max.raw
-weewx_inside_humidity_max{period="week"} $week.inHumidity.max.raw
-weewx_inside_humidity_max{period="month"} $month.inHumidity.max.raw
-weewx_inside_humidity_max{period="year"} $year.inHumidity.max.raw
+weewx_inside_humidity_max{period="day"} ${$d.inHumidity.max.raw if $d and $d.inHumidity and $d.inHumidity.max and $d.inHumidity.max.raw is not None else 'NaN'}
+weewx_inside_humidity_max{period="week"} ${$w.inHumidity.max.raw if $w and $w.inHumidity and $w.inHumidity.max and $w.inHumidity.max.raw is not None else 'NaN'}
+weewx_inside_humidity_max{period="month"} ${$m.inHumidity.max.raw if $m and $m.inHumidity and $m.inHumidity.max and $m.inHumidity.max.raw is not None else 'NaN'}
+weewx_inside_humidity_max{period="year"} ${$y.inHumidity.max.raw if $y and $y.inHumidity and $y.inHumidity.max and $y.inHumidity.max.raw is not None else 'NaN'}
 
 # HELP weewx_inside_humidity_min Minimum indoor humidity
 # TYPE weewx_inside_humidity_min gauge
-weewx_inside_humidity_min{period="day"} $day.inHumidity.min.raw
-weewx_inside_humidity_min{period="week"} $week.inHumidity.min.raw
-weewx_inside_humidity_min{period="month"} $month.inHumidity.min.raw
-weewx_inside_humidity_min{period="year"} $year.inHumidity.min.raw
+weewx_inside_humidity_min{period="day"} ${$d.inHumidity.min.raw if $d and $d.inHumidity and $d.inHumidity.min and $d.inHumidity.min.raw is not None else 'NaN'}
+weewx_inside_humidity_min{period="week"} ${$w.inHumidity.min.raw if $w and $w.inHumidity and $w.inHumidity.min and $w.inHumidity.min.raw is not None else 'NaN'}
+weewx_inside_humidity_min{period="month"} ${$m.inHumidity.min.raw if $m and $m.inHumidity and $m.inHumidity.min and $m.inHumidity.min.raw is not None else 'NaN'}
+weewx_inside_humidity_min{period="year"} ${$y.inHumidity.min.raw if $y and $y.inHumidity and $y.inHumidity.min and $y.inHumidity.min.raw is not None else 'NaN'}
